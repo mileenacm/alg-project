@@ -44,20 +44,20 @@ class Jogo:
 
         # --- DADOS DAS ROUPAS ---
         self.roupas = [
-            {"nome": "blusa azul", "tipo": "blusa", "arquivo": "blusaazul.png", "offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
-            {"nome": "blusa branca", "tipo": "blusa", "arquivo": "blusabranca.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
-            {"nome": "Top Esportivo ", "tipo": "blusa", "arquivo": "topbranco.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
-            {"nome": "Saia", "tipo": "calca", "arquivo": "saiapreta.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 50, "Faculdade": 30, "Academia": 10}},
-            {"nome": "Jeans Largo Baggy", "tipo": "calca", "arquivo": "calça.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 35, "Faculdade": 50, "Academia": 10}} ,
-            {"nome": "Shorts Tactel", "tipo": "calca", "arquivo": "shortpreto.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 10, "Faculdade": 20, "Academia": 50}},
-            {"nome": "blusa branca 2", "tipo": "blusa", "arquivo": "blusabranca2.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
-            {"nome": "saião", "tipo": "calca", "arquivo": "saiaobranco.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 0}},
-            {"nome": "regata branca ", "tipo": "blusa", "arquivo": "regatabranca.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
-            {"nome": "blusa verde", "tipo": "blusa", "arquivo": "blusaverde.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
-            {"nome": "calça alfaiataria", "tipo": "calca", "arquivo": "calça.png","offset_x":-390, "offset_y": -220, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
-            {"nome": "vestido azul ", "tipo": "vestido", "arquivo": "vestidoazul.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 0, "Faculdade": 0, "Academia": 0}},
-            {"nome": "vestido verde", "tipo": "vestido", "arquivo": "vestidoverde.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 50, "Faculdade": 20, "Academia": 0}},
-            {"nome": "vestido marrom", "tipo": "vestido", "arquivo": "vestidomarrom.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 50, "Faculdade": 50, "Academia": 0}},
+            {"nome": "blusa azul", "tipo": "blusa", "arquivo": "blusaazul.png", "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
+            {"nome": "blusa branca", "tipo": "blusa", "arquivo": "blusabranca.png", "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
+            {"nome": "Top Esportivo ", "tipo": "blusa", "arquivo": "topbranco.png", "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
+            {"nome": "Saia", "tipo": "calca", "arquivo": "saiapreta.png", "pontos": {"Show": 50, "Faculdade": 30, "Academia": 10}},
+            {"nome": "Jeans Largo Baggy", "tipo": "calca", "arquivo": "calça.png", "pontos": {"Show": 35, "Faculdade": 50, "Academia": 10}},
+            {"nome": "Shorts Tactel", "tipo": "calca", "arquivo": "shortpreto.png", "pontos": {"Show": 10, "Faculdade": 20, "Academia": 50}},
+            {"nome": "blusa branca 2", "tipo": "blusa", "arquivo": "blusabranca2.png", "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
+            {"nome": "saião", "tipo": "calca", "arquivo": "saiaobranco.png", "pontos": {"Show": 30, "Faculdade": 50, "Academia": 0}},
+            {"nome": "regata branca ", "tipo": "blusa", "arquivo": "regatabranca.png", "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
+            {"nome": "blusa verde", "tipo": "blusa", "arquivo": "blusaverde.png", "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
+            {"nome": "calça alfaiataria", "tipo": "calca", "arquivo": "calça.png", "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
+            {"nome": "vestido azul ", "tipo": "vestido", "arquivo": "vestidoazul.png", "pontos": {"Show": 0, "Faculdade": 0, "Academia": 0}},
+            {"nome": "vestido verde", "tipo": "vestido", "arquivo": "vestidoverde.png", "pontos": {"Show": 50, "Faculdade": 20, "Academia": 0}},
+            {"nome": "vestido marrom", "tipo": "vestido", "arquivo": "vestidomarrom.png", "pontos": {"Show": 50, "Faculdade": 50, "Academia": 0}},
         ]
 
         # Carrega imagens e som
@@ -131,27 +131,6 @@ class Jogo:
         self.vestido_equipado = None
         self.acessorio_bonus_desbloqueado = False
 
-    def desenhar_roupa_ajustada(self, item, pos_base):
-        """
-        Calcula a posição final da roupa baseada na posição da boneca 
-        somada aos ajustes (offsets) de ancoragem.
-        """
-        if not item:
-            return
-            
-        nome_arq = item.get("arquivo")
-        if nome_arq in self.imagens_roupas:
-            # Pega os valores de ajuste. Se a roupa não tiver offset cadastrado, usa 0.
-            offset_x = item.get("offset_x", 0)
-            offset_y = item.get("offset_y", 0)
-            
-            # Soma a posição da boneca (120, 130) com o ajuste da peça
-            pos_final_x = pos_base[0] + offset_x
-            pos_final_y = pos_base[1] + offset_y
-            
-            # Desenha a peça na tela na posição calculada
-            self.tela.blit(self.imagens_roupas[nome_arq], (pos_final_x, pos_final_y))
-
     # --- MÁQUINA DE ESTADOS (TELAS) ---
     def tela_menu(self):
         txt_titulo = self.fonte_titulo.render("Dream Wardrobe", True, self.COR_DOURADA)
@@ -196,9 +175,11 @@ class Jogo:
         if self.modelo_selecionado is not None and self.modelo_selecionado < len(self.img_modelos):
             self.tela.blit(self.img_modelos[self.modelo_selecionado], pos_modelo)
 
-        # Desenha as roupas equipadas usando o novo sistema de ancoragem
         for item in [self.blusa_equipada, self.calca_equipada, self.vestido_equipado]:
-            self.desenhar_roupa_ajustada(item, pos_modelo)
+            if item:
+                nome_arq = item.get("arquivo")
+                if nome_arq in self.imagens_roupas:
+                    self.tela.blit(self.imagens_roupas[nome_arq], pos_modelo)
 
         # Lista de botões do guarda-roupa
         y_item = 130
