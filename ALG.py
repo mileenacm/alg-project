@@ -42,10 +42,10 @@ class Jogo:
         self.calca_equipada = None
         self.vestido_equipado = None
 
-        # ------------------- DADOS DAS ROUPAS -------------------------------- #
+        # ----------------------- DADOS DAS ROUPAS -------------------------------- #
         self.roupas = [
             #Peça de cima
-            {"nome": "blusa azul", "tipo": "blusa", "arquivo": "blusaazul.png", "offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
+            {"nome": "blusa azul", "tipo": "blusa", "arquivo": "blusaazul.png", "offset_x": 95, "offset_y": 140, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
             {"nome": "blusa branca", "tipo": "blusa", "arquivo": "blusabranca.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
             {"nome": "blusa branca 2", "tipo": "blusa", "arquivo": "blusabranca2.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}}, 
             {"nome": "regata branca ", "tipo": "blusa", "arquivo": "regatabranca.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
@@ -91,22 +91,39 @@ class Jogo:
                 pygame.image.load("alg-project/assets/imagens/boneca01.png"),  # Aisha
                 pygame.image.load("alg-project/assets/imagens/boneca02.png"),  # Chloe
             ]
+            
+            # Alterar largura e altura das modelos
+            self.img_modelos = [pygame.transform.scale(img, (320, 530)) for img in self.img_modelos]
+
         except pygame.error as e:
             print(f"Aviso: Criando superfícies temporárias para as bonecas: {e}")
-            self.img_modelos = [pygame.Surface((200, 400), pygame.SRCALPHA) for _ in range(2)]
+            # Altere aqui também:
+            self.img_modelos = [pygame.Surface((320, 530), pygame.SRCALPHA) for _ in range(2)]
             self.img_modelos[0].fill((200, 150, 150))
             self.img_modelos[1].fill((150, 150, 200))
 
         # Roupas
         self.imagens_roupas = {}
+
+        fator_escala = 1.5 
+
         for r in self.roupas:
             try:
                 caminho_completo = "alg-project/assets/imagens/" + r["arquivo"]
-                self.imagens_roupas[r["arquivo"]] = pygame.image.load(caminho_completo)
-            except FileNotFoundError:
-                img_temp = pygame.Surface((200, 400), pygame.SRCALPHA)
+                img_original = pygame.image.load(caminho_completo)
+                
+                # 🟢 ALTERAÇÃO: Redimensiona mantendo a proporção original da própria imagem
+                nova_largura = int(img_original.get_width() * fator_escala)
+                nova_altura = int(img_original.get_height() * fator_escala)
+                img_redimensionada = pygame.transform.scale(img_original, (nova_largura, nova_altura))
+                
+                self.imagens_roupas[r["arquivo"]] = img_redimensionada
+                
+            except (FileNotFoundError, pygame.error):
+                img_temp = pygame.Surface((100, 100), pygame.SRCALPHA)
                 img_temp.fill((230, 180, 200, 150))
                 self.imagens_roupas[r["arquivo"]] = img_temp
+
 
     def desenhar_botao(self, texto, x, y, largura, altura, cor_base, cor_hover):
         mouse = pygame.mouse.get_pos()
@@ -146,11 +163,11 @@ class Jogo:
             
         nome_arq = item.get("arquivo")
         if nome_arq in self.imagens_roupas:
-            # Pega os valores de ajuste. Se a roupa não tiver offset cadastrado, usa 0.
+            # 🟢 ALTERAÇÃO: Volta a ler o offset específico definido na lista de roupas
             offset_x = item.get("offset_x", 0)
             offset_y = item.get("offset_y", 0)
             
-            # Soma a posição da boneca (120, 130) com o ajuste da peça
+            # Soma a posição da boneca com o ajuste da peça
             pos_final_x = pos_base[0] + offset_x
             pos_final_y = pos_base[1] + offset_y
             
@@ -195,7 +212,7 @@ class Jogo:
         txt_evento = self.fonte_subtitulo.render(f"Tema: {evento_nome}", True, self.COR_DESTAQUE)
         self.tela.blit(txt_evento, (self.LARGURA // 2 - txt_evento.get_width() // 2, 75))
 
-        pos_modelo = (120, 130)
+        pos_modelo = (220, 130)
 
         # Desenha a modelo e as roupas equipadas
         if self.modelo_selecionado is not None and self.modelo_selecionado < len(self.img_modelos):
@@ -213,7 +230,7 @@ class Jogo:
                 if roupa in [self.blusa_equipada, self.calca_equipada, self.vestido_equipado]:
                     prefixo = "[X] "
 
-                if self.desenhar_botao(prefixo + roupa["nome"], 470, y_item, 145, 25, self.COR_BOTAO, self.COR_BOTAO_HOVER):
+                if self.desenhar_botao(prefixo + roupa["nome"], 600, y_item, 145, 25, self.COR_BOTAO, self.COR_BOTAO_HOVER):
                     tipo = roupa.get("tipo")
                     if tipo == "blusa":
                         self.blusa_equipada = roupa
