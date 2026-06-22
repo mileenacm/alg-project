@@ -3,7 +3,7 @@ import sys
 
 class Jogo:
     def __init__(self):
-        # --- INICIALIZAÇÃO ---
+        # --------------- INICIALIZAÇÃO -------------------#
         pygame.init()
         pygame.mixer.init()
         pygame.font.init()
@@ -14,7 +14,7 @@ class Jogo:
         self.relogio = pygame.time.Clock()
         self.rodando = True
 
-        # --- CORES ---
+        # ------------------ CORES ----------------------#
         self.COR_CARD = (255, 255, 255)
         self.COR_DOURADA = (255, 225, 100)
         self.COR_TEXTO = (255, 250, 200)
@@ -24,12 +24,12 @@ class Jogo:
         self.COR_DESTAQUE = (255, 105, 180)
         self.COR_FUNDO_PADRAO = (245, 230, 240)
 
-        # --- FONTES ---
+        # ------------------ FONTES -----------------#
         self.fonte_titulo = pygame.font.Font("alg-project/assets/font/Midnight Angel.ttf", 60)
         self.fonte_subtitulo = pygame.font.SysFont("alg-project/assets/font/Retrochips.otf", 36)
         self.fonte_comum = pygame.font.SysFont(None, 24)
 
-        # --- VARIÁVEIS DE ESTADO E GAMEPLAY ---
+        # ------------- VARIÁVEIS DE ESTADO E GAMEPLAY --------------#
         self.estado_atual = "MENU"
         self.modelos_nomes = ["Aisha", "Chloe"]
         self.modelo_selecionado = 0
@@ -42,19 +42,24 @@ class Jogo:
         self.calca_equipada = None
         self.vestido_equipado = None
 
-        # --- DADOS DAS ROUPAS ---
+        # ------------------- DADOS DAS ROUPAS -------------------------------- #
         self.roupas = [
+            #Peça de cima
             {"nome": "blusa azul", "tipo": "blusa", "arquivo": "blusaazul.png", "offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
             {"nome": "blusa branca", "tipo": "blusa", "arquivo": "blusabranca.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
-            {"nome": "Top Esportivo ", "tipo": "blusa", "arquivo": "topbranco.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
-            {"nome": "Saia", "tipo": "calca", "arquivo": "saiapreta.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 50, "Faculdade": 30, "Academia": 10}},
-            {"nome": "Jeans Largo Baggy", "tipo": "calca", "arquivo": "calça.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 35, "Faculdade": 50, "Academia": 10}} ,
-            {"nome": "Shorts Tactel", "tipo": "calca", "arquivo": "shortpreto.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 10, "Faculdade": 20, "Academia": 50}},
-            {"nome": "blusa branca 2", "tipo": "blusa", "arquivo": "blusabranca2.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
-            {"nome": "saião", "tipo": "calca", "arquivo": "saiaobranco.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 0}},
+            {"nome": "blusa branca 2", "tipo": "blusa", "arquivo": "blusabranca2.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}}, 
             {"nome": "regata branca ", "tipo": "blusa", "arquivo": "regatabranca.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
             {"nome": "blusa verde", "tipo": "blusa", "arquivo": "blusaverde.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 20, "Academia": 10}},
+            {"nome": "Top Esportivo ", "tipo": "blusa", "arquivo": "topbranco.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 15, "Faculdade": 10, "Academia": 50}},
+
+            #Peça de baixo
+            {"nome": "Shorts Tactel", "tipo": "calca", "arquivo": "shortpreto.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 10, "Faculdade": 20, "Academia": 50}},
+            {"nome": "Saia", "tipo": "calca", "arquivo": "saiapreta.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 50, "Faculdade": 30, "Academia": 10}}, 
+            {"nome": "saião", "tipo": "calca", "arquivo": "saiaobranco.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 0}}, 
             {"nome": "calça alfaiataria", "tipo": "calca", "arquivo": "calça.png","offset_x":-390, "offset_y": -220, "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
+             {"nome": "Jeans Largo Baggy", "tipo": "calca", "arquivo": "calça.png","offset_x": 0, "offset_y": 80, "pontos": {"Show": 35, "Faculdade": 50, "Academia": 10}},  
+
+             #Vestido
             {"nome": "vestido azul ", "tipo": "vestido", "arquivo": "vestidoazul.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 0, "Faculdade": 0, "Academia": 0}},
             {"nome": "vestido verde", "tipo": "vestido", "arquivo": "vestidoverde.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 50, "Faculdade": 20, "Academia": 0}},
             {"nome": "vestido marrom", "tipo": "vestido", "arquivo": "vestidomarrom.png","offset_x": -390, "offset_y": -220, "pontos": {"Show": 50, "Faculdade": 50, "Academia": 0}},
@@ -152,7 +157,7 @@ class Jogo:
             # Desenha a peça na tela na posição calculada
             self.tela.blit(self.imagens_roupas[nome_arq], (pos_final_x, pos_final_y))
 
-    # --- MÁQUINA DE ESTADOS (TELAS) ---
+    # ------------ MÁQUINA DE ESTADOS (TELAS) ------------- #
     def tela_menu(self):
         txt_titulo = self.fonte_titulo.render("Dream Wardrobe", True, self.COR_DOURADA)
         txt_sub = self.fonte_subtitulo.render("Estilo Urbano Anos 2000", True, self.COR_TEXTO)
@@ -208,7 +213,7 @@ class Jogo:
                 if roupa in [self.blusa_equipada, self.calca_equipada, self.vestido_equipado]:
                     prefixo = "[X] "
 
-                if self.desenhar_botao(prefixo + roupa["nome"], 470, y_item, 280, 25, self.COR_BOTAO, self.COR_BOTAO_HOVER):
+                if self.desenhar_botao(prefixo + roupa["nome"], 470, y_item, 145, 25, self.COR_BOTAO, self.COR_BOTAO_HOVER):
                     tipo = roupa.get("tipo")
                     if tipo == "blusa":
                         self.blusa_equipada = roupa
@@ -282,7 +287,7 @@ class Jogo:
                 pygame.time.delay(150)
                 self.estado_atual = "MENU"
 
-    # --- LOOP PRINCIPAL ---
+    # ------------------ LOOP PRINCIPAL ------------------ #
     def rodar(self):
         while self.rodando:
             # Desenha o fundo
