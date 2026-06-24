@@ -75,16 +75,11 @@ class Jogo:
              "pontos": {"Show": 30, "Faculdade": 50, "Academia": 0}},
             {"nome": "calça alfaiataria", "tipo": "calca", "arquivo": "calça.png", "offset_x": 0, "offset_y": 140,
              "pontos": {"Show": 30, "Faculdade": 50, "Academia": 25}},
-            {"nome": "Jeans Largo Baggy", "tipo": "calca", "arquivo": "calça.png", "offset_x": 0, "offset_y": 140,
-             "pontos": {"Show": 35, "Faculdade": 50, "Academia": 10}},
+            
 
             # Vestido
             {"nome": "vestido azul ", "tipo": "vestido", "arquivo": "vestidoazul.png", "offset_x": 0, "offset_y": 40,
-             "pontos": {"Show": 0, "Faculdade": 0, "Academia": 0}},
-            {"nome": "vestido verde", "tipo": "vestido", "arquivo": "vestidoverde.png", "offset_x": 0, "offset_y": 40,
-             "pontos": {"Show": 50, "Faculdade": 20, "Academia": 0}},
-            {"nome": "vestido marrom", "tipo": "vestido", "arquivo": "vestidomarrom.png", "offset_x": 0, "offset_y": 40,
-             "pontos": {"Show": 50, "Faculdade": 50, "Academia": 0}},
+             "pontos": {"Show": 0, "Faculdade": 0, "Academia": 0}}
         ]
 
         # Carrega imagens e som
