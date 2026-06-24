@@ -130,6 +130,42 @@ class Jogo:
                     img_redimensionada = pygame.transform.smoothscale(img_original, (nova_largura, nova_altura))
 
                     self.imagens_roupas[r["arquivo"]] = img_redimensionada
+
+    
+# ---- Encaixando a roupa na modelo ---- #
+    def desenhar_roupa_ajustada(self, item, rect_modelo):
+        if not item:
+            return
+
+        nome_arq = item.get("arquivo")
+        img = self.imagens_roupas.get(nome_arq)
+        if not img:
+            return
+
+        offset_x = item.get("offset_x", 0)
+        offset_y = item.get("offset_y", 0)
+        tipo = item.get("tipo")
+
+        if tipo == "blusa":
+            x = rect_modelo.centerx + offset_x
+            y = rect_modelo.top + 73 + offset_y
+            rect_roupa = img.get_rect(midtop=(x, y))
+
+        elif tipo == "calca":
+            x = rect_modelo.centerx + offset_x
+            y = rect_modelo.top + 64.5 + offset_y
+            rect_roupa = img.get_rect(midtop=(x, y))
+
+        elif tipo == "vestido":
+            x = rect_modelo.centerx + offset_x
+            y = rect_modelo.top + 69 + offset_y
+            rect_roupa = img.get_rect(midtop=(x, y))
+
+        else:
+            rect_roupa = img.get_rect(center=rect_modelo.center)
+
+        self.tela.blit(img, rect_roupa)
+
            
     def desenhar_botao_icone(self, imagem_original, x, y, largura, altura, esta_selecionada, cor_hover):
         mouse = pygame.mouse.get_pos()
@@ -207,48 +243,11 @@ class Jogo:
         self.vestido_equipado = None
         self.acessorio_bonus_desbloqueado = False
 
-# ---- Encaixando a roupa na modelo ---- #
-    def desenhar_roupa_ajustada(self, item, rect_modelo):
-        if not item:
-            return
-
-        nome_arq = item.get("arquivo")
-        img = self.imagens_roupas.get(nome_arq)
-        if not img:
-            return
-
-        offset_x = item.get("offset_x", 0)
-        offset_y = item.get("offset_y", 0)
-        tipo = item.get("tipo")
-
-        if tipo == "blusa":
-            x = rect_modelo.centerx + offset_x
-            y = rect_modelo.top + 73 + offset_y
-            rect_roupa = img.get_rect(midtop=(x, y))
-
-        elif tipo == "calca":
-            x = rect_modelo.centerx + offset_x
-            y = rect_modelo.top + 64.5 + offset_y
-            rect_roupa = img.get_rect(midtop=(x, y))
-
-        elif tipo == "vestido":
-            x = rect_modelo.centerx + offset_x
-            y = rect_modelo.top + 69 + offset_y
-            rect_roupa = img.get_rect(midtop=(x, y))
-
-        else:
-            rect_roupa = img.get_rect(center=rect_modelo.center)
-
-        self.tela.blit(img, rect_roupa)
-
+# ------- Máquina de estados ------ #
     def tela_menu(self):
-        if self.img_botao_start:
-            self.tela.blit(self.img_botao_start, self.rect_botao_start)
-        else:
-            if self.desenhar_botao("JOGAR", self.LARGURA // 2 - 100, 350, 200, 50, self.COR_BOTAO,
-                                   self.COR_BOTAO_HOVER):
-                pygame.time.delay(150)
-                self.estado_atual = "SELECAO"
+        self.img_botao_start
+        self.tela.blit(self.img_botao_start, self.rect_botao_start)
+        
 
     def tela_selecao(self):
         txt_sel = self.fonte_titulo.render("Escolha sua Modelo", True, self.COR_TEXTO)
@@ -400,6 +399,7 @@ class Jogo:
                 pygame.time.delay(150)
                 self.estado_atual = "MENU"
 
+# ----- Loop principal ----- #
     def rodar(self):
         while self.rodando:
             if self.estado_atual == "MENU" and self.imagem_fundo_menu is not None:
@@ -426,7 +426,7 @@ class Jogo:
         pygame.quit()
         sys.exit()
 
-
+ # -- objeto -- #
 if __name__ == "__main__":
     meu_jogo = Jogo()
     meu_jogo.rodar()
