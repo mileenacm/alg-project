@@ -326,7 +326,7 @@ class Jogo:
                     pygame.time.delay(120)
 
         if (self.blusa_equipada and self.calca_equipada) or self.vestido_equipado:
-            if self.desenhar_botao("AVALIAR LOOK", 450, 525, 320, 45, self.COR_PRONTO, self.COR_BOTAO_HOVER):
+            if self.desenhar_botao("AVALIAR LOOK", 95, 525, 320, 45, self.COR_PRONTO, self.COR_BOTAO_HOVER):
                 pygame.time.delay(150)
                 self.estado_atual = "AVALIACAO"
 
