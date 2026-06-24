@@ -31,17 +31,11 @@ class Jogo:
         self.COR_FUNDO_PADRAO = (245, 230, 240)
 
         # ------------------ FONTES -----------------#
-        try:
-            self.fonte_titulo = pygame.font.Font(os.path.join(self.BASE_DIR, "assets", "font", "Midnight Angel.ttf"),
-                                                 55)
-            self.fonte_subtitulo = pygame.font.Font(os.path.join(self.BASE_DIR, "assets", "font", "Retrochips.otf"), 32)
-        except pygame.error:
-            print("Aviso: Fontes não encontradas no local especificado, usando padrão do sistema.")
-            self.fonte_titulo = pygame.font.SysFont("arial", 50, bold=True)
-            self.fonte_subtitulo = pygame.font.SysFont("arial", 32, bold=True)
+        self.fonte_titulo = pygame.font.Font(os.path.join(self.BASE_DIR, "assets", "font", "Midnight Angel.ttf"), 55)
+        self.fonte_subtitulo = pygame.font.Font(os.path.join(self.BASE_DIR, "assets", "font", "Retrochips.otf"), 32)
 
         self.fonte_comum = pygame.font.SysFont("arial", 22, bold=True)
-        self.fonte_pontos = pygame.font.SysFont("arial", 28, bold=True)  # Fonte robusta para a pontuação
+        self.fonte_pontos = pygame.font.SysFont("arial", 28, bold=True) 
 
         # ------------- VARIÁVEIS DE ESTADO E GAMEPLAY --------------#
         self.estado_atual = "MENU"
@@ -98,73 +92,50 @@ class Jogo:
 
     def carregar_assets(self):
         # Áudio
-        try:
             pygame.mixer.music.load(os.path.join(self.BASE_DIR, "assets", "sons", "trilha.mp3"))
             pygame.mixer.music.set_volume(0.2)
             pygame.mixer.music.play(-1)
-        except pygame.error:
-            pass
-
+        
         # Fundo do Jogo
-        try:
             fundo = pygame.image.load(os.path.join(self.BASE_DIR, "assets", "imagens", "fundo.png"))
             self.imagem_fundo_jogo = pygame.transform.scale(fundo, (self.LARGURA, self.ALTURA))
-        except pygame.error as e:
-            print(f"Não consegui carregar o fundo do jogo: {e}")
-            self.imagem_fundo_jogo = None
 
         # Fundo do Menu
-        try:
             fundo_m = pygame.image.load(os.path.join(self.BASE_DIR, "assets", "imagens", "fundo.menu.png"))
             self.imagem_fundo_menu = pygame.transform.scale(fundo_m, (self.LARGURA, self.ALTURA))
-        except pygame.error as e:
-            print(f"Não consegui carregar o fundo do menu: {e}")
-            self.imagem_fundo_menu = None
-
+        
         # Botão Start do Menu
-        try:
             img_original = pygame.image.load(os.path.join(self.BASE_DIR, "assets", "imagens", "botao.png"))
             largura_nova = int(img_original.get_width() * 0.6)
             altura_nova = int(img_original.get_height() * 0.6)
             self.img_botao_start = pygame.transform.scale(img_original, (largura_nova, altura_nova))
             self.rect_botao_start = self.img_botao_start.get_rect(center=(self.LARGURA // 2, 600 - 240))
-        except pygame.error as e:
-            print(f"Não consegui carregar o botão do menu: {e}")
-            self.img_botao_start = None
-            self.rect_botao_start = pygame.Rect(self.LARGURA // 2 - 100, 350, 200, 50)
-
+        
         # Modelos
-        try:
             self.img_modelos = [
                 pygame.image.load(os.path.join(self.BASE_DIR, "assets", "imagens", "boneca01.png")),
                 pygame.image.load(os.path.join(self.BASE_DIR, "assets", "imagens", "boneca02.png")),
             ]
             self.img_modelos = [pygame.transform.scale(img, (320, 530)) for img in self.img_modelos]
-        except pygame.error as e:
-            print(f"Aviso: Criando superfícies temporárias para as bonecas: {e}")
-            self.img_modelos = [pygame.Surface((320, 530), pygame.SRCALPHA) for _ in range(2)]
-            self.img_modelos[0].fill((200, 150, 150))
-            self.img_modelos[1].fill((150, 150, 200))
-
+       
         # Roupas
-        self.imagens_roupas = {}
-        fator_escala = 1.5
+            self.imagens_roupas = {}
+            fator_escala = 0.47
 
-        for r in self.roupas:
-            try:
-                caminho_completo = os.path.join(self.BASE_DIR, "assets", "imagens", r["arquivo"])
-                img_original = pygame.image.load(caminho_completo)
+            for r in self.roupas:
+                    caminho_completo = os.path.join(self.BASE_DIR, "assets", "imagens", r["arquivo"])
+                    img_original = pygame.image.load(caminho_completo).convert_alpha()
 
-                nova_largura = int(img_original.get_width() * fator_escala)
-                nova_altura = int(img_original.get_height() * fator_escala)
-                img_redimensionada = pygame.transform.scale(img_original, (nova_largura, nova_altura))
+                    bbox = img_original.get_bounding_rect()
+                    if bbox.width > 0 and bbox.height > 0:
+                        img_original = img_original.subsurface(bbox).copy()
 
-                self.imagens_roupas[r["arquivo"]] = img_redimensionada
-            except (FileNotFoundError, pygame.error):
-                img_temp = pygame.Surface((100, 100), pygame.SRCALPHA)
-                img_temp.fill((230, 180, 200, 150))
-                self.imagens_roupas[r["arquivo"]] = img_temp
+                    nova_largura = int(img_original.get_width() * fator_escala)
+                    nova_altura = int(img_original.get_height() * fator_escala)
+                    img_redimensionada = pygame.transform.smoothscale(img_original, (nova_largura, nova_altura))
 
+                    self.imagens_roupas[r["arquivo"]] = img_redimensionada
+           
     def desenhar_botao_icone(self, imagem_original, x, y, largura, altura, esta_selecionada, cor_hover):
         mouse = pygame.mouse.get_pos()
         clique = pygame.mouse.get_pressed()
@@ -241,16 +212,39 @@ class Jogo:
         self.vestido_equipado = None
         self.acessorio_bonus_desbloqueado = False
 
-    def desenhar_roupa_ajustada(self, item, pos_base):
+# ---- Encaixando a roupa na modelo ---- #
+    def desenhar_roupa_ajustada(self, item, rect_modelo):
         if not item:
             return
+
         nome_arq = item.get("arquivo")
-        if nome_arq in self.imagens_roupas:
-            offset_x = item.get("offset_x", 0)
-            offset_y = item.get("offset_y", 0)
-            pos_final_x = pos_base[0] + offset_x
-            pos_final_y = pos_base[1] + offset_y
-            self.tela.blit(self.imagens_roupas[nome_arq], (pos_final_x, pos_final_y))
+        img = self.imagens_roupas.get(nome_arq)
+        if not img:
+            return
+
+        offset_x = item.get("offset_x", 0)
+        offset_y = item.get("offset_y", 0)
+        tipo = item.get("tipo")
+
+        if tipo == "blusa":
+            x = rect_modelo.centerx + offset_x
+            y = rect_modelo.top + 73 + offset_y
+            rect_roupa = img.get_rect(midtop=(x, y))
+
+        elif tipo == "calca":
+            x = rect_modelo.centerx + offset_x
+            y = rect_modelo.top + 64.5 + offset_y
+            rect_roupa = img.get_rect(midtop=(x, y))
+
+        elif tipo == "vestido":
+            x = rect_modelo.centerx + offset_x
+            y = rect_modelo.top + 69 + offset_y
+            rect_roupa = img.get_rect(midtop=(x, y))
+
+        else:
+            rect_roupa = img.get_rect(center=rect_modelo.center)
+
+        self.tela.blit(img, rect_roupa)
 
     def tela_menu(self):
         if self.img_botao_start:
@@ -292,12 +286,15 @@ class Jogo:
         pos_modelo = (100, 100)
 
         if self.modelo_selecionado is not None and self.modelo_selecionado < len(self.img_modelos):
-            self.tela.blit(self.img_modelos[self.modelo_selecionado], pos_modelo)
+            modelo_img = self.img_modelos[self.modelo_selecionado]
+            rect_modelo = modelo_img.get_rect(topleft=pos_modelo)
 
-        for item in [self.blusa_equipada, self.calca_equipada, self.vestido_equipado]:
-            self.desenhar_roupa_ajustada(item, pos_modelo)
+            self.tela.blit(modelo_img, rect_modelo)
 
-        # --- SISTEMA DE GRELHA DO ARMÁRIO ---
+            for item in [self.blusa_equipada, self.calca_equipada, self.vestido_equipado]:
+                self.desenhar_roupa_ajustada(item, rect_modelo)
+
+        # --- SISTEMA DO GUARDA-ROUPA --- #
         x_inicial = 440
         y_inicial = 140
         colunas = 3
