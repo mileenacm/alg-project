@@ -389,9 +389,12 @@ class Jogo:
             final_total = self.pontuacao_total + pontos_ultimo
 
             # Caixa escura final para mostrar o fim de jogo
-            pygame.draw.rect(self.tela, (0, 0, 0), (self.LARGURA // 2 - 250, 380, 500, 45), border_radius=8)
-            txt_fim = self.fonte_subtitulo.render(f"Fim do Jogo! Pontuação Total: {final_total} pts", True,
-                                                  (255, 255, 255))
+            pygame.draw.rect(self.tela, (0, 0, 0), (self.LARGURA // 2 - 350, 380, 700, 60),
+            border_radius=8)
+            txt_fim = self.fonte_comum.render(
+            f"Fim do Jogo! Pontuação Total: {final_total} pts",
+            True, (255, 255, 255))
+
             self.tela.blit(txt_fim, (self.LARGURA // 2 - txt_fim.get_width() // 2, 385))
 
             if self.desenhar_botao("VOLTAR AO MENU", self.LARGURA // 2 - 120, 470, 240, 50, self.COR_BOTAO,
@@ -401,6 +404,7 @@ class Jogo:
 
 # ----- Loop principal ----- #
     def rodar(self):
+        
         while self.rodando:
             if self.estado_atual == "MENU" and self.imagem_fundo_menu is not None:
                 self.tela.blit(self.imagem_fundo_menu, (0, 0))
